@@ -1,6 +1,77 @@
-public class Main {
-    public static void main(String[] args) {
+import java.util.Random;
 
-        System.out.println(" ");
+public class Main {
+
+    private final static Random RANDOM = new Random();
+    private final static String[] NAMES = {"Александр", "Иван", "Андрей", "Петр", "Олег", "Михаил", "Павел", "Сергей", "Денис", "Роман"};
+    private final static String[] SURNAMES = {"Александров", "Иванов", "Андреев", "Петров", "Олегов", "Михаилов", "Павлов", "Сергеев", "Денисов", "Романов"};
+    private final static String[] PATRONYMIC_NAMES = {"Александрович", "Иванович", "Андреевич", "Петрович", "Олегович", "Михаилович", "Павлович", "Сергеевич", "Денисович", "Романович"};
+
+    private final static Employee[] EMPLOYEES = new Employee[10];
+
+    public static void initEmployee() {
+        for (int i = 0; i < EMPLOYEES.length; i++) {
+            String fullName = SURNAMES[RANDOM.nextInt(0, SURNAMES.length)] + " " +
+                    NAMES[RANDOM.nextInt(0, NAMES.length)] + " " +
+                    PATRONYMIC_NAMES[RANDOM.nextInt(0, PATRONYMIC_NAMES.length)];
+
+            EMPLOYEES[i] = new Employee(fullName, RANDOM.nextInt(1, 6), RANDOM.nextInt(50_000, 100_000));
+        }
+    }
+
+    public static void main(String[] args) {
+        initEmployee();
+        print();
+        System.out.println("Сумма ЗП сотрудников: " + calculateSunOfSalaries());
+        System.out.println("Сотрудник с мин. ЗП: " + findEmployeeWithMinSalary());
+        System.out.println("Сотрудник с макс. ЗП: " + findEmployeeWithMaxSalary());
+        System.out.println("Средняя ЗП: " + calculateAverageOfSalaries());
+        printFullNames();
+    }
+
+    public static void print() {
+        for (Employee employee : EMPLOYEES) {
+            System.out.println(employee);
+
+        }
+    }
+
+    private static int calculateSunOfSalaries() {
+        int sum = 0;
+        for (Employee employee : EMPLOYEES) {
+            sum += employee.getSalary();
+        }
+        return sum;
+    }
+
+    public static Employee findEmployeeWithMinSalary() {
+        Employee employeeWithMinSalary = null;
+        for (Employee employee : EMPLOYEES) {
+            if (employeeWithMinSalary == null || employee.getSalary() < employeeWithMinSalary.getSalary()) {
+                employeeWithMinSalary = employee;
+            }
+        }
+        return employeeWithMinSalary;
+    }
+
+    public static Employee findEmployeeWithMaxSalary() {
+        Employee employeeWithMaxSalary = null;
+        for (Employee employee : EMPLOYEES) {
+            if (employeeWithMaxSalary == null || employee.getSalary() > employeeWithMaxSalary.getSalary()) {
+                employeeWithMaxSalary = employee;
+            }
+        }
+        return employeeWithMaxSalary;
+    }
+
+    private static double calculateAverageOfSalaries() {
+        return (double) calculateSunOfSalaries() / EMPLOYEES.length;
+    }
+
+    public static void printFullNames() {
+        for (Employee employee : EMPLOYEES) {
+            System.out.println(employee.getFullName());
+
+        }
     }
 }
